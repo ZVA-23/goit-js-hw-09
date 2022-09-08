@@ -9,15 +9,10 @@
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import { Notify } from 'notiflix';
-// import 'notiflix/dist/notiflix-3.2.5.min.css';
 
 const dateChosen = document.querySelector('#datetime-picker');
 const startBtn = document.querySelector('button[data-start]');
 const timerClassDiv = document.querySelector('.timer');
-const dayComponent = document.querySelector('[data-days]');
-const hourComponent = document.querySelector('[data-hours]');
-const minuteComponent = document.querySelector('[data-minutes]');
-const secondeComponent = document.querySelector('[data-seconds]');
 
 startBtn.classList.add('disabled');
 
@@ -84,10 +79,14 @@ class Timer {
       const deltaTime = userDayTime - currentTime;
       const elements = convertMs(deltaTime);
 
-      secondeComponent.textContent = elements.seconds;
-      minuteComponent.textContent = elements.minutes;
-      hourComponent.textContent = elements.hours;
-      dayComponent.textContent = elements.days;
+      const setTextContent = element => {
+        document.querySelector(`[data-${element}]`).textContent =
+          elements[element];
+      };
+      for (const element in elements) {
+        setTextContent(element);
+      }
+
       if (deltaTime <= 0) {
         this.timerStop();
         timerClassDiv.innerHTML = 'Time is over!';
